@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DataBaseTest</string>
+    <string name="action_settings">Add Name</string>
+    <string name="action_update">Update</string>
+    <string name="name">Add Name</string>
+    <string name="update">Update Name</string>
+    <string name="del_button">Delete</string>
+</resources>
