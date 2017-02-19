@@ -60,6 +60,7 @@ public class EditTextActivity extends AppCompatActivity {
         mDelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                delName();
 
             }
         });
@@ -67,11 +68,11 @@ public class EditTextActivity extends AppCompatActivity {
     }
 
     private void delName(){
+        //DELETE * FROM VIVZTABLE Where Name='vivz'
         SQLiteDatabase db = mSQLiteDatabase.getWritableDatabase();
-
-
-
-
+        String[] whereNameis = {mDelName.getText().toString()};
+            db.delete("littleTable","name=?",whereNameis);
+        finish();
 
     }
 
