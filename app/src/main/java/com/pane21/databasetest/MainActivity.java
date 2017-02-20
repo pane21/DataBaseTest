@@ -120,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_update) {
+            SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
+            db.delete("littleTable",null,null);
+            displayDatabaseRows();
 
 
 
