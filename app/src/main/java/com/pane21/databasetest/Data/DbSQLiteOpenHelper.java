@@ -8,11 +8,14 @@ import com.pane21.databasetest.Data.DbContract.TableEntry;
 
 
 public class DbSQLiteOpenHelper extends SQLiteOpenHelper {
-    private static final String TAG = "DbSQLiteOpenHelper";
+        private static final String TAG = "DbSQLiteOpenHelper";
+
+        public static final String DATABASE_NAME = "mikey.db";
+        public static final int DATABASE_VERSION = 1;
 
 
-    public DbSQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    public DbSQLiteOpenHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
 

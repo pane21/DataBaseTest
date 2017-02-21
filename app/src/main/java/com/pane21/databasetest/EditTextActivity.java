@@ -27,7 +27,7 @@ public class EditTextActivity extends AppCompatActivity {
 
         mTextView = (EditText)findViewById(R.id.editText2);
         mButton = (Button) findViewById(R.id.button);
-        mSQLiteDatabase = new DbSQLiteOpenHelper(this,"mikey.db", null, 1);
+        mSQLiteDatabase = new DbSQLiteOpenHelper(this);
         mOldName = (EditText)findViewById(R.id.editOld);
         mNewName = (EditText)findViewById(R.id.editNew);
         mUpdate = (Button)findViewById(R.id.button2);

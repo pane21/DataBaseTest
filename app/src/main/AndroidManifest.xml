@@ -20,6 +20,12 @@
         </activity>
         <activity android:name=".EditTextActivity">
         </activity>
+        <provider
+            android:authorities="com.pane21.databasetest"
+            android:name=".Data.DbProvider"
+            android:exported="false"/>
+
     </application>
+
 
 </manifest>

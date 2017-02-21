@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.content_main);
 
+        displayDatabaseRows();
 
 
 
@@ -62,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void displayDatabaseRows() {
-        mDbSQLiteOpenHelper = new DbSQLiteOpenHelper(this, "mikey.db", null, 1);
+
+        mDbSQLiteOpenHelper = new DbSQLiteOpenHelper(this);
         SQLiteDatabase db = mDbSQLiteOpenHelper.getReadableDatabase();
 
 
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
 //
 //   Cursor cursor = mDbSQLiteOpenHelper.rawQuery("SELECT * FROM littleTable",null);
-        Cursor cursor = db.query("littleTable",null,null,null,null,null,null);
+        Cursor cursor = db.query(TableEntry.TABLE_NAME,null,null,null,null,null,null);
 
 
         while (cursor.moveToNext()) {
@@ -93,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(TableEntry.COLUMN_NAME,"Toto");
 
-        mRowId = db.insert("littleTable",null,values);
+        mRowId = db.insert(TableEntry.TABLE_NAME,null,values);
+
 
 
     }
@@ -122,8 +125,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (id == R.id.action_update) {
             SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
-            db.delete("littleTable",null,null);
-//            db.execSQL("DROP TABLE littleTable;");
+            db.delete(TableEntry.TABLE_NAME,null,null);
             displayDatabaseRows();
 
 
