@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.pane21.databasetest.Data.DbContract.TableEntry;
+
 
 public class DbSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "DbSQLiteOpenHelper";
@@ -20,9 +22,10 @@ public class DbSQLiteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String SQL_CREATE_TABLE =
-                "CREATE TABLE littleTable (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);";
+                "CREATE TABLE " + TableEntry.TABLE_NAME + "("
+                        + TableEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                        + TableEntry.COLUMN_NAME + " TEXT);";
         db.execSQL(SQL_CREATE_TABLE);
-
 
 }
 

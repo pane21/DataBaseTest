@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.pane21.databasetest.Data.DbContract.TableEntry;
 import com.pane21.databasetest.Data.DbSQLiteOpenHelper;
 
 import java.util.ArrayList;
@@ -36,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.content_main);
 
-        mDbSQLiteOpenHelper = new DbSQLiteOpenHelper(this, "mikey.db", null, 1);
-        displayDatabaseRows();
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void displayDatabaseRows() {
+        mDbSQLiteOpenHelper = new DbSQLiteOpenHelper(this, "mikey.db", null, 1);
         SQLiteDatabase db = mDbSQLiteOpenHelper.getReadableDatabase();
 
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         while (cursor.moveToNext()) {
-        mArrayList.add(cursor.getString(cursor.getColumnIndex("_id"))+ ". "+ cursor.getString(cursor.getColumnIndex("name")));
+        mArrayList.add(cursor.getString(cursor.getColumnIndex("_id"))+ ". "+ cursor.getString(cursor.getColumnIndex(TableEntry.COLUMN_NAME)));
 
 
     }
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("name", "Toto");
+        values.put(TableEntry.COLUMN_NAME,"Toto");
 
         mRowId = db.insert("littleTable",null,values);
 
@@ -122,7 +123,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_update) {
             SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
             db.delete("littleTable",null,null);
+//            db.execSQL("DROP TABLE littleTable;");
             displayDatabaseRows();
+
 
 
 
