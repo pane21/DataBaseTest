@@ -4,8 +4,10 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.widget.Switch;
 
 
 public class DbProvider extends ContentProvider {
@@ -33,7 +35,16 @@ public class DbProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;
+        SQLiteDatabase db = mDbSQLiteOpenHelper.getReadableDatabase();
+        int match = sUriMatcher.match(uri);
+
+        Cursor cursor = null;
+        switch(match) {
+            case 100:
+            cursor = db.query(DbContract.TableEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+        break;
+        }
+        return cursor;
     }
 
     @Nullable
