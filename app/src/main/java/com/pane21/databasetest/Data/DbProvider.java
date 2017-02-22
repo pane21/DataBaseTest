@@ -2,6 +2,7 @@ package com.pane21.databasetest.Data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -9,6 +10,16 @@ import android.support.annotation.Nullable;
 
 public class DbProvider extends ContentProvider {
     private DbSQLiteOpenHelper mDbSQLiteOpenHelper;
+    public static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+
+
+    static {
+        sUriMatcher.addURI(DbContract.CONTENT_AUTHORITY,DbContract.CONTENT_PATH_DB,100);
+        sUriMatcher.addURI(DbContract.CONTENT_AUTHORITY,DbContract.CONTENT_PATH_DB+"#",101);
+
+    }
+
 
 
     @Override
