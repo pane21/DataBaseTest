@@ -63,6 +63,9 @@ public class EditTextActivity extends AppCompatActivity {
 
     }
 
+
+
+
     private void insertName(){
         ContentValues values = new ContentValues();
         values.put(DbContract.TableEntry.COLUMN_NAME, mTextView.getText().toString());
@@ -75,9 +78,11 @@ public class EditTextActivity extends AppCompatActivity {
 
     private void delName(){
         //DELETE * FROM VIVZTABLE Where Name='vivz'
-        SQLiteDatabase db = mSQLiteDatabase.getWritableDatabase();
         String[] whereNameis = {mDelName.getText().toString()};
-            db.delete("littleTable","name=?",whereNameis);
+
+        getContentResolver().delete(DbContract.TableEntry.CONTENT_URI, DbContract.TableEntry.COLUMN_NAME+"=?",whereNameis);
+
+
         finish();
 
     }
@@ -93,7 +98,5 @@ public class EditTextActivity extends AppCompatActivity {
         db.update("littleTable",values,"name=?",whereArgs);
         finish();
     }
-
-
 
 }

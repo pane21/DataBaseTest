@@ -63,6 +63,16 @@ public class DbProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+
+        SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
+        int match = sUriMatcher.match(uri);
+
+        switch (match){
+            case 100:
+
+                db.delete(DbContract.TableEntry.TABLE_NAME,selection,selectionArgs);
+        }
+
         return 0;
     }
 
