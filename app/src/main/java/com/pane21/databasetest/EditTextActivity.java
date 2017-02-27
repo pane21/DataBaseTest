@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.pane21.databasetest.Data.DbContract;
 import com.pane21.databasetest.Data.DbSQLiteOpenHelper;
 
 public class EditTextActivity extends AppCompatActivity {
@@ -38,12 +39,7 @@ public class EditTextActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SQLiteDatabase db = mSQLiteDatabase.getWritableDatabase();
-
-                ContentValues values = new ContentValues();
-                values.put("name", mTextView.getText().toString());
-                db.insert("littleTable",null,values);
-                finish();
+            insertName();
 
             }
         });
@@ -67,6 +63,16 @@ public class EditTextActivity extends AppCompatActivity {
 
     }
 
+    private void insertName(){
+        ContentValues values = new ContentValues();
+        values.put(DbContract.TableEntry.COLUMN_NAME, mTextView.getText().toString());
+
+        getContentResolver().insert(DbContract.TableEntry.CONTENT_URI,values);
+        finish();
+
+
+    }
+
     private void delName(){
         //DELETE * FROM VIVZTABLE Where Name='vivz'
         SQLiteDatabase db = mSQLiteDatabase.getWritableDatabase();
@@ -82,7 +88,7 @@ public class EditTextActivity extends AppCompatActivity {
         SQLiteDatabase db = mSQLiteDatabase.getWritableDatabase();
         //UPDATE littleTable SET name='Mike' WHERE name='Toto';
         ContentValues values = new ContentValues();
-        values.put("name",newName);
+        values.put(DbContract.TableEntry.COLUMN_NAME,newName);
         String[] whereArgs={oldName};
         db.update("littleTable",values,"name=?",whereArgs);
         finish();

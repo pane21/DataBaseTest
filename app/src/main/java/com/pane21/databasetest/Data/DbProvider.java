@@ -69,6 +69,14 @@ public class DbProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
+
+        int match = sUriMatcher.match(uri);
+        switch (match) {
+        case 100:
+        db.insert(DbContract.TableEntry.TABLE_NAME,null,values);
+            break;
+        }
         return null;
     }
 }

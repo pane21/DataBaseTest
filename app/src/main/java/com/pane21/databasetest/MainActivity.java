@@ -26,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
     ListView mListView;
 
 
-    long mRowId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 insertEntry();
-                displayDatabaseRows();
-                Snackbar.make(view, mRowId + " inserted", Snackbar.LENGTH_LONG)
+                Snackbar.make(view," inserted", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -70,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<String> mArrayList = new ArrayList<>();
 
-
-//
 //   Cursor cursor = mDbSQLiteOpenHelper.rawQuery("SELECT * FROM littleTable",null);
-        Cursor cursor = db.query(TableEntry.TABLE_NAME,null,null,null,null,null,null);
+
+//        Cursor cursor = db.query(TableEntry.TABLE_NAME,null,null,null,null,null,null);
+        Cursor cursor = getContentResolver().query(TableEntry.CONTENT_URI,null,null,null,null);
 
 
         while (cursor.moveToNext()) {
@@ -90,13 +87,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void insertEntry(){
-        SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
+//        SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(TableEntry.COLUMN_NAME,"Toto");
 
-        mRowId = db.insert(TableEntry.TABLE_NAME,null,values);
+        getContentResolver().insert(TableEntry.CONTENT_URI,values);
 
+        displayDatabaseRows();
 
 
     }
