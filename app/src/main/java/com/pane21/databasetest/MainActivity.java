@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     private void displayDatabaseRows() {
 
         mDbSQLiteOpenHelper = new DbSQLiteOpenHelper(this);
