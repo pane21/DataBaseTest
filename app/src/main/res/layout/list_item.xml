@@ -8,5 +8,8 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text_View"/>
+        android:id="@+id/name_view"
+        android:typeface="normal"
+        android:fontFamily="monospace"
+        android:textSize="18sp"/>
 </LinearLayout>

@@ -5,4 +5,5 @@
     <string name="name">Add Name</string>
     <string name="update">Update Name</string>
     <string name="del_button">Delete</string>
+    <string name="empty_view">Add an Entry</string>
 </resources>

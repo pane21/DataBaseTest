@@ -1,6 +1,7 @@
 package com.pane21.databasetest;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,21 +10,25 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.pane21.databasetest.Data.DbContract.TableEntry;
 import com.pane21.databasetest.Data.DbSQLiteOpenHelper;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private DbSQLiteOpenHelper mDbSQLiteOpenHelper;
     ArrayAdapter<String> mArrayAdapter;
     ListView mListView;
+    TextView emptyView;
+
 
 
     @Override
@@ -33,7 +38,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        emptyView = (TextView)findViewById(R.id.empty_title_text);
         mListView = (ListView) findViewById(R.id.content_main);
+        mListView.setEmptyView(emptyView);
+
+
 
         displayDatabaseRows();
 
@@ -63,28 +72,31 @@ public class MainActivity extends AppCompatActivity {
     private void displayDatabaseRows() {
 
         mDbSQLiteOpenHelper = new DbSQLiteOpenHelper(this);
-        SQLiteDatabase db = mDbSQLiteOpenHelper.getReadableDatabase();
+//        SQLiteDatabase db = mDbSQLiteOpenHelper.getReadableDatabase();
 
 
-        ArrayList<String> mArrayList = new ArrayList<>();
+
+//        ArrayList<String> mArrayList = new ArrayList<>();
 
 //   Cursor cursor = mDbSQLiteOpenHelper.rawQuery("SELECT * FROM littleTable",null);
-
 //        Cursor cursor = db.query(TableEntry.TABLE_NAME,null,null,null,null,null,null);
         Cursor cursor = getContentResolver().query(TableEntry.CONTENT_URI,null,null,null,null);
 
 
-        while (cursor.moveToNext()) {
-        mArrayList.add(cursor.getString(cursor.getColumnIndex(TableEntry._ID))+ ". "+ cursor.getString(cursor.getColumnIndex(TableEntry.COLUMN_NAME)));
+//        while (cursor.moveToNext()) {
+//        mArrayList.add(cursor.getString(cursor.getColumnIndex(TableEntry._ID))+ ". "+ cursor.getString(cursor.getColumnIndex(TableEntry.COLUMN_NAME)));
+//
+//
+//    }
+
+        CustomCursorAdapter adapter = new CustomCursorAdapter(this,cursor);
+
+//        mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mArrayList);
+        mListView.setAdapter(adapter);
 
 
-    }
-        mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mArrayList);
-        mListView.setAdapter(mArrayAdapter);
 
-
-
-        cursor.close();
+//        cursor.close();
     }
 
     private void insertEntry(){
@@ -135,4 +147,28 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+      private class CustomCursorAdapter extends CursorAdapter{
+
+          public CustomCursorAdapter(Context context, Cursor c) {
+              super(context, c, 0);
+          }
+
+          @Override
+          public View newView(Context context, Cursor cursor, ViewGroup parent) {
+              return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+          }
+
+          @Override
+          public void bindView(View view, Context context, Cursor cursor) {
+
+              TextView nameView = (TextView)view.findViewById(R.id.name_view);
+
+              String body = cursor.getString(cursor.getColumnIndex(TableEntry.COLUMN_NAME));
+
+              nameView.setText(body);
+
+
+          }
+      }
 }
