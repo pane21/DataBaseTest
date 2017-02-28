@@ -55,6 +55,16 @@ public class DbProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        SQLiteDatabase db= mDbSQLiteOpenHelper.getWritableDatabase();
+
+        int match = sUriMatcher.match(uri);
+
+        switch (match){
+            case 100:
+                db.update(DbContract.TableEntry.TABLE_NAME,values,selection,selectionArgs);
+                break;
+        }
+
         return 0;
     }
 

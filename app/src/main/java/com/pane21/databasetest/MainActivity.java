@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 insertEntry();
-                Snackbar.make(view," inserted", Snackbar.LENGTH_LONG)
+                Snackbar.make(view,""+ TableEntry._ID + " inserted", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         while (cursor.moveToNext()) {
-        mArrayList.add(cursor.getString(cursor.getColumnIndex("_id"))+ ". "+ cursor.getString(cursor.getColumnIndex(TableEntry.COLUMN_NAME)));
+        mArrayList.add(cursor.getString(cursor.getColumnIndex(TableEntry._ID))+ ". "+ cursor.getString(cursor.getColumnIndex(TableEntry.COLUMN_NAME)));
 
 
     }
