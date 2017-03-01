@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -15,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,11 +25,11 @@ import android.widget.TextView;
 import com.pane21.databasetest.Data.DbContract.TableEntry;
 import com.pane21.databasetest.Data.DbSQLiteOpenHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     private DbSQLiteOpenHelper mDbSQLiteOpenHelper;
-    ArrayAdapter<String> mArrayAdapter;
     ListView mListView;
     TextView emptyView;
+    CustomCursorAdapter mCustomCursorAdapter;
 
 
 
@@ -42,9 +44,13 @@ public class MainActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.content_main);
         mListView.setEmptyView(emptyView);
 
+        mCustomCursorAdapter = new CustomCursorAdapter(this, null);
+        mListView.setAdapter(mCustomCursorAdapter);
+//        getLoaderManager().initLoader(0,null,this);
+        getSupportLoaderManager().initLoader(0,null,this);
 
 
-        displayDatabaseRows();
+//        displayDatabaseRows();
 
 
 
@@ -62,42 +68,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        displayDatabaseRows();
+//        displayDatabaseRows();
         super.onStart();
 
     }
 
 
 
-    private void displayDatabaseRows() {
-
-        mDbSQLiteOpenHelper = new DbSQLiteOpenHelper(this);
-//        SQLiteDatabase db = mDbSQLiteOpenHelper.getReadableDatabase();
-
-
-
-//        ArrayList<String> mArrayList = new ArrayList<>();
-
-//   Cursor cursor = mDbSQLiteOpenHelper.rawQuery("SELECT * FROM littleTable",null);
-//        Cursor cursor = db.query(TableEntry.TABLE_NAME,null,null,null,null,null,null);
-        Cursor cursor = getContentResolver().query(TableEntry.CONTENT_URI,null,null,null,null);
-
-
-//        while (cursor.moveToNext()) {
-//        mArrayList.add(cursor.getString(cursor.getColumnIndex(TableEntry._ID))+ ". "+ cursor.getString(cursor.getColumnIndex(TableEntry.COLUMN_NAME)));
+//    private void displayDatabaseRows() {
 //
+//        mDbSQLiteOpenHelper = new DbSQLiteOpenHelper(this);
+//
+//        Cursor cursor = getContentResolver().query(TableEntry.CONTENT_URI,null,null,null,null);
+//
+//
+//        CustomCursorAdapter adapter = new CustomCursorAdapter(this,cursor);
+//
+//        mListView.setAdapter(adapter);
 //
 //    }
-
-        CustomCursorAdapter adapter = new CustomCursorAdapter(this,cursor);
-
-//        mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mArrayList);
-        mListView.setAdapter(adapter);
-
-
-
-//        cursor.close();
-    }
 
     private void insertEntry(){
 //        SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
@@ -107,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         getContentResolver().insert(TableEntry.CONTENT_URI,values);
 
-        displayDatabaseRows();
+//        displayDatabaseRows();
 
 
     }
@@ -137,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_update) {
             SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
             db.delete(TableEntry.TABLE_NAME,null,null);
-            displayDatabaseRows();
+//            displayDatabaseRows();
 
 
 
@@ -148,7 +137,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-      private class CustomCursorAdapter extends CursorAdapter{
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this,TableEntry.CONTENT_URI,null,null,null,null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mCustomCursorAdapter.swapCursor(data);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mCustomCursorAdapter.swapCursor(null);
+
+    }
+
+
+    private class CustomCursorAdapter extends CursorAdapter{
 
           public CustomCursorAdapter(Context context, Cursor c) {
               super(context, c, 0);
