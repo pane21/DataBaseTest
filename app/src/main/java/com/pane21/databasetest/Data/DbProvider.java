@@ -44,6 +44,7 @@ public class DbProvider extends ContentProvider {
             cursor = db.query(DbContract.TableEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
         break;
         }
+        cursor.setNotificationUri(getContext().getContentResolver(),uri);
         return cursor;
     }
 
@@ -64,6 +65,8 @@ public class DbProvider extends ContentProvider {
                 db.update(DbContract.TableEntry.TABLE_NAME,values,selection,selectionArgs);
                 break;
         }
+        getContext().getContentResolver().notifyChange(uri, null);
+
 
         return 0;
     }
@@ -83,6 +86,8 @@ public class DbProvider extends ContentProvider {
                 db.delete(DbContract.TableEntry.TABLE_NAME,selection,selectionArgs);
         }
 
+        getContext().getContentResolver().notifyChange(uri, null);
+
         return 0;
     }
 
@@ -97,6 +102,8 @@ public class DbProvider extends ContentProvider {
         db.insert(DbContract.TableEntry.TABLE_NAME,null,values);
             break;
         }
+
+        getContext().getContentResolver().notifyChange(uri, null);
         return null;
     }
 }

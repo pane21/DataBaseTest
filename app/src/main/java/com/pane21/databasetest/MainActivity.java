@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,10 +22,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pane21.databasetest.Data.DbContract.TableEntry;
-import com.pane21.databasetest.Data.DbSQLiteOpenHelper;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
-    private DbSQLiteOpenHelper mDbSQLiteOpenHelper;
     ListView mListView;
     TextView emptyView;
     CustomCursorAdapter mCustomCursorAdapter;
@@ -44,15 +41,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mListView = (ListView) findViewById(R.id.content_main);
         mListView.setEmptyView(emptyView);
 
+
+
         mCustomCursorAdapter = new CustomCursorAdapter(this, null);
+
         mListView.setAdapter(mCustomCursorAdapter);
 //        getLoaderManager().initLoader(0,null,this);
         getSupportLoaderManager().initLoader(0,null,this);
-
-
-//        displayDatabaseRows();
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,22 +61,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
 
-    @Override
-    protected void onStart() {
-//        displayDatabaseRows();
-        super.onStart();
-
-    }
-
 
 
 //    private void displayDatabaseRows() {
 //
-//        mDbSQLiteOpenHelper = new DbSQLiteOpenHelper(this);
 //
 //        Cursor cursor = getContentResolver().query(TableEntry.CONTENT_URI,null,null,null,null);
-//
-//
 //        CustomCursorAdapter adapter = new CustomCursorAdapter(this,cursor);
 //
 //        mListView.setAdapter(adapter);
@@ -89,14 +74,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //    }
 
     private void insertEntry(){
-//        SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(TableEntry.COLUMN_NAME,"Toto");
 
         getContentResolver().insert(TableEntry.CONTENT_URI,values);
 
-//        displayDatabaseRows();
 
 
     }
@@ -124,12 +107,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             return true;
         }
         if (id == R.id.action_update) {
-            SQLiteDatabase db = mDbSQLiteOpenHelper.getWritableDatabase();
-            db.delete(TableEntry.TABLE_NAME,null,null);
-//            displayDatabaseRows();
 
-
-
+            getContentResolver().delete(TableEntry.CONTENT_URI,null,null);
 
             return true;
         }
@@ -151,8 +130,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mCustomCursorAdapter.swapCursor(null);
-
     }
+
+
+
+
+
 
 
     private class CustomCursorAdapter extends CursorAdapter{
