@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.pane21.databasetest.Data.DbContract;
 import com.pane21.databasetest.Data.DbSQLiteOpenHelper;
@@ -31,18 +32,6 @@ public class EditTextActivity extends AppCompatActivity implements LoaderManager
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_text);
-
-        Intent intent = getIntent();
-        Uri selectedUri = intent.getData();
-
-        if(selectedUri == null){
-            setTitle("Add a Name");
-        }else {
-
-            setTitle("Edit Name");
-        }
-
-        getSupportLoaderManager().initLoader(0,null,this);
 
         mTextView = (EditText)findViewById(R.id.editText2);
         mButton = (Button) findViewById(R.id.button);
@@ -78,6 +67,20 @@ public class EditTextActivity extends AppCompatActivity implements LoaderManager
 
             }
         });
+
+        Intent intent = getIntent();
+        mCurrentUri = intent.getData();
+
+        if(mCurrentUri == null){
+            setTitle("Add a Name");
+        }else {
+
+            setTitle("Edit Name");
+//            mOldName.setText(mCurrentUri.toString());
+            Toast.makeText(this,mCurrentUri.toString(),Toast.LENGTH_LONG).show();
+            getSupportLoaderManager().initLoader(0,null,this);
+
+        }
 
     }
 
@@ -122,18 +125,21 @@ public class EditTextActivity extends AppCompatActivity implements LoaderManager
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this,mCurrentUri,null,null,null,null);
+        String[] projection = {DbContract.TableEntry._ID, DbContract.TableEntry.COLUMN_NAME};
+        return new CursorLoader(this, mCurrentUri ,projection,null,null,null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(data.moveToFirst()){
-            mOldName.setText(data.getString(data.getColumnIndex(DbContract.TableEntry.COLUMN_NAME)));
+            int nameColumnIndex = data.getColumnIndex(DbContract.TableEntry.COLUMN_NAME);
+            String name = data.getString(nameColumnIndex);
+            mOldName.setText(name);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+            mOldName.setText("");
     }
 }
