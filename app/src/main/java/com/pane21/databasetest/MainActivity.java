@@ -1,9 +1,11 @@
 package com.pane21.databasetest;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,13 +44,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mListView = (ListView) findViewById(R.id.content_main);
         mListView.setEmptyView(emptyView);
 
-
-
         mCustomCursorAdapter = new CustomCursorAdapter(this, null);
 
         mListView.setAdapter(mCustomCursorAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this,EditTextActivity.class);
+
+                Uri intentUri = ContentUris.withAppendedId(TableEntry.CONTENT_URI,id);
+
+                intent.setData(intentUri);
+                startActivity(intent);
+
+
+            }
+        });
+
 //        getLoaderManager().initLoader(0,null,this);
         getSupportLoaderManager().initLoader(0,null,this);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -62,16 +78,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
 
-
-//    private void displayDatabaseRows() {
-//
-//
-//        Cursor cursor = getContentResolver().query(TableEntry.CONTENT_URI,null,null,null,null);
-//        CustomCursorAdapter adapter = new CustomCursorAdapter(this,cursor);
-//
-//        mListView.setAdapter(adapter);
-//
-//    }
 
     private void insertEntry(){
 
@@ -115,6 +121,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
