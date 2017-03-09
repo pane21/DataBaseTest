@@ -82,6 +82,11 @@ public class DbProvider extends ContentProvider {
             case 100:
                 db.update(DbContract.TableEntry.TABLE_NAME,values,selection,selectionArgs);
                 break;
+            case 101:
+                selection = DbContract.TableEntry._ID+"=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                db.update(DbContract.TableEntry.TABLE_NAME,values,selection,selectionArgs);
+                break;
         }
         getContext().getContentResolver().notifyChange(uri, null);
 

@@ -116,9 +116,7 @@ public class EditTextActivity extends AppCompatActivity implements LoaderManager
         ContentValues values = new ContentValues();
         values.put(DbContract.TableEntry.COLUMN_NAME,newName);
         String[] whereArgs={oldName};
-        getContentResolver().update(DbContract.TableEntry.CONTENT_URI,values, DbContract.TableEntry.COLUMN_NAME+"=?",whereArgs);
-
-
+        getContentResolver().update(mCurrentUri,values, DbContract.TableEntry.COLUMN_NAME+"=?",whereArgs);
 
         finish();
     }
